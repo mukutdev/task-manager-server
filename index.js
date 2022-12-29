@@ -26,7 +26,16 @@ async function run(){
             res.send(result);
         })
 
-        
+        //getting all added car based on seller
+
+    app.get("/allTask",  async (req, res) => {
+        const email = req.query.email;
+        const query = { email: email };
+        const tasks = await taskCollections.find(query).toArray();
+        res.send(tasks);
+      });
+
+
 
 
     }
