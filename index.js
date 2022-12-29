@@ -30,8 +30,9 @@ async function run(){
 
     app.get("/allTask",  async (req, res) => {
         const email = req.query.email;
-        const query = { email: email };
-        const tasks = await taskCollections.find(query).toArray();
+        // const query = {};
+        const status = req.query.status;
+        const tasks = await taskCollections.find({$and : [{email : email} , {status : status}]}).toArray();
         res.send(tasks);
       });
 
@@ -42,6 +43,27 @@ async function run(){
         const task = await taskCollections.deleteOne(query)
         res.send(task);
       });
+
+      // mark completed
+
+      app.put("/allTask/update/:id" , async(req , res)=>{
+        const id = req.params.id
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updatedDoc = {
+            $set: {
+              status: "completed",
+            },
+          };
+    
+          const result = await taskCollections.updateOne(
+            filter,
+            updatedDoc,
+            options
+          );
+          res.send(result);
+
+      })
 
     }
     finally{
