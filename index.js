@@ -26,7 +26,7 @@ async function run(){
             res.send(result);
         })
 
-        //getting all added car based on seller
+        //getting task based on incomplete or completed task
 
     app.get("/allTask",  async (req, res) => {
         const email = req.query.email;
@@ -35,6 +35,10 @@ async function run(){
         const tasks = await taskCollections.find({$and : [{email : email} , {status : status}]}).toArray();
         res.send(tasks);
       });
+
+      
+
+
 
       // delete api
       app.delete("/allTask/:id", async (req, res) => {
@@ -52,7 +56,7 @@ async function run(){
         const options = { upsert: true };
         const updatedDoc = {
             $set: {
-              status: "completed",
+              status: 'completed'
             },
           };
     
