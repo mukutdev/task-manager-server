@@ -54,23 +54,36 @@ async function run(){
       })
 
       // mark completed
-      app.put("/allTask/update/:id" , async(req , res)=>{
-        const id = req.params.id
+
+      app.put("/allTask/completed/:id", async (req, res) => {
+        const id = req.params.id;
         const filter = { _id: ObjectId(id) };
         const options = { upsert: true };
         const updatedDoc = {
-            $set: {
-              status : { status: status === 'incomplete' ? 'complete' : 'incomplete' }
-            },
-          };
-          const result = await taskCollections.updateOne(
-            filter,
-            updatedDoc,
-            options
-          );
-          res.send(result);
+          $set: {
+            status: "completed"
+          },
+        };
+        const result = await taskCollections.updateOne(filter, updatedDoc, options);
+        res.send(result);
+      });
 
-      })
+      // mark in complete
+
+      app.put("/allTask/incomplete/:id", async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updatedDoc = {
+          $set: {
+            status: "incomplete"
+          },
+        };
+        const result = await taskCollections.updateOne(filter, updatedDoc, options);
+        res.send(result);
+      });
+
+   
 
       //get task count
       app.get('/allTask/count' , async(req , res)=>{
